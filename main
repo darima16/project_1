@@ -1,0 +1,53 @@
+import time
+
+def bin(func):
+    def wrapped(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        end = time.time()
+        print('Индекс: ', result)
+        print('Время выполнения: {} секунд.'.format(end - start))
+        return result
+    return wrapped
+
+@bin
+def iter(lst, n):
+    m = len(lst) // 2
+    ind_min = 0
+    ind_max = len(lst) - 1
+    while lst[m]!= n and ind_min <= ind_max:
+        if n > lst[m]:
+            ind_min = m + 1
+        else:
+            ind_max = m - 1
+        m = (ind_min + ind_max) // 2
+
+    if ind_min > ind_max:
+        return None
+    return m
+
+@bin
+def rec(lst, n, start, stop):
+    if start > stop:
+        return None
+    m = (start + stop) // 2
+    if n == lst[m]:
+        return m
+    if n < lst[m]:
+        return rec(lst, n, start, m - 1)
+    return rec(lst, n, m + 1, stop)
+
+def main():
+    lst = list(map(int, input('Введите числа через пробел: ').split()))
+    lst.sort()
+    n = int(input('Введите искомое число: '))
+    start = 0
+    stop = len(lst)
+    print()
+    print('Итеративный метод')
+    iter(lst, n)
+    print()
+    print('Рекурсивный метод')
+    rec(lst, n, start, stop)
+
+main()
